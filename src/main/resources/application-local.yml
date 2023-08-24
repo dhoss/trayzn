@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      jdbc-url: >
+        jdbc:postgresql://localhost:5432/trayzn
+      pool-name: trayzn-pool
+      username: trayzn
+      password: trayzn
+
+logging:
+  level:
+    in.stonecolddev: DEBUG
+    org.springframework.jdbc.core: TRACE
