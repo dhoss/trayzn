@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping(value = "/api/v1/bookmarks", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BookmarkController {
@@ -19,8 +17,8 @@ public class BookmarkController {
   private final Logger log = LoggerFactory.getLogger(BookmarkController.class);
 
   @PostMapping("/add")
-  public HttpEntity<Map<String,String>> create(@RequestBody Map<String, String> link) {
-    log.debug("***** ADD {}", link);
-    return ResponseEntity.ok(link);
+  public HttpEntity<Bookmark> create(@RequestBody Bookmark bookmark) {
+    log.info("Adding bookmark {}", bookmark);
+    return ResponseEntity.ok(bookmark);
   }
 }

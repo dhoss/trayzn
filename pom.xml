@@ -21,6 +21,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>io.soabase.record-builder</groupId>
+			<artifactId>record-builder-core</artifactId>
+			<version>${record-builder.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
@@ -124,9 +130,9 @@
 				<version>0.8.10</version>
 				<configuration>
 					<excludes>
-						<exclude>com/helio/maliketh/configuration/**/*</exclude>
-						<exclude>com/helio/maliketh/**/*Builder*.class</exclude>
-						<exclude>com/helio/maliketh/MalikethApplication.class</exclude>
+						<exclude>in/stonecolddev/trayzn/configuration/**/*</exclude>
+						<exclude>in/stonecolddev/trayzn/**/*Builder*.class</exclude>
+						<exclude>in/stonecolddev/trayzn/TrayznApplication.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
