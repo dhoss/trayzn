@@ -4,17 +4,19 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.net.URL;
 import java.time.OffsetDateTime;
 
+@Table("bookmarks")
 @RecordBuilder
 public record Bookmark(
   @Id
   Integer id,
-  URL url,
+  String url,
   String title,
+  String slug,
   String favIconUrl,
   OffsetDateTime created,
   OffsetDateTime updated,
+  Boolean takeSnapshot,
   OffsetDateTime lastSnapshot
 ) {}
