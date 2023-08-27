@@ -1,0 +1,1 @@
+curl -XPOST http://localhost:8080/api/v1/bookmarks/add -d '{"url":"google.com"}'

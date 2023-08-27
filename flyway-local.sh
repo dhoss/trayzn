@@ -1,0 +1,1 @@
+flyway -url='jdbc:postgresql://127.0.0.1:5432/trayzn' -user=trayzn -password=trayzn -configFiles="src/main/resources/db/flyway-local.conf" $1

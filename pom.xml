@@ -17,9 +17,14 @@
 		<java.version>20</java.version>
 		<spring-cloud.version>2022.0.0</spring-cloud.version>
 		<testcontainers.version>1.17.6</testcontainers.version>
-		<record-builder.version>35</record-builder.version>
+		<record-builder.version>37</record-builder.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>2.2</version>
+		</dependency>
 		<dependency>
 			<groupId>io.soabase.record-builder</groupId>
 			<artifactId>record-builder-core</artifactId>
@@ -61,12 +66,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -118,6 +121,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>
+						--add-opens=java.base/java.net=ALL-UNNAMED
+					</jvmArguments>
+				</configuration>
 				<!-- TODO: enable this if we need pattern matching
 				<configuration>
 					<jvmArguments>- -enable-preview</jvmArguments>
@@ -174,6 +182,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M7</version>
+				<configuration>
+					<argLine>--add-opens=java.base/java.net=ALL-UNNAMED</argLine>
+				</configuration>
 				<!-- TODO: enable this if we need pattern matching
 				<configuration>
 					<argLine>@{argLine} - -enable-preview</argLine>
