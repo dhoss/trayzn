@@ -18,6 +18,7 @@
 		<spring-cloud.version>2022.0.0</spring-cloud.version>
 		<testcontainers.version>1.17.6</testcontainers.version>
 		<record-builder.version>37</record-builder.version>
+		<coveralls.secret>${env.COVERALLS_REPO_TOKEN}</coveralls.secret>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -119,6 +120,21 @@
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>4.3.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+						<version>2.3.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<repoToken>${coveralls.secret}</repoToken>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -161,7 +177,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.11.0</version>
 				<configuration>
 					<release>${java.version}</release>
 					<source>${java.version}</source>
@@ -183,7 +199,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M7</version>
 				<configuration>
-					<argLine>--add-opens=java.base/java.net=ALL-UNNAMED</argLine>
+					<argLine>@{argLine} --add-opens=java.base/java.net=ALL-UNNAMED</argLine>
 				</configuration>
 				<!-- TODO: enable this if we need pattern matching
 				<configuration>
