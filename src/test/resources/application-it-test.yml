@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       jdbc-url: >
-        jdbc:tc:postgresql:15:///trayzn
+        jdbc:tc:postgresql:15:///trayzn?TC_INITSCRIPT=db/setup.sql
       pool-name: trayzn-pool
       username: trayzn
       password: trayzn
