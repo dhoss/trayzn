@@ -21,10 +21,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BookmarkControllerTest {
 
   @Autowired
-  MockMvc api;
+  private MockMvc api;
 
   @Test
-  void addBookmarkAuthorized() throws Exception {
+  public void addBookmarkAuthorized() throws Exception {
     api.perform(
       post("/api/v1/bookmarks/add")
         .content("""
@@ -42,7 +42,7 @@ class BookmarkControllerTest {
 
   // TODO: fix authentication setup so that it returns the correct error instead of throwing an exception
   @Test
-  void addBookmarkUnauthorized() {
+  public void addBookmarkUnauthorized() {
     assertThrows(
       ServletException.class,
       () -> api.perform(

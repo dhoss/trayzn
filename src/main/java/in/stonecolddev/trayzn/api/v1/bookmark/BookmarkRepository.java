@@ -1,4 +1,6 @@
 package in.stonecolddev.trayzn.api.v1.bookmark;
 
-public interface BookmarkRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface BookmarkRepository extends CrudRepository<Bookmark, Integer> {
 }
