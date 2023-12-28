@@ -6,12 +6,14 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Table("bookmarks")
 @RecordBuilder
 public record Bookmark(
   @Id
   Integer id,
+  UUID uuid,
   String url,
   String title,
   @Column("favicon_url")
@@ -20,4 +22,4 @@ public record Bookmark(
   OffsetDateTime updated,
   @Column("last_snapshot")
   OffsetDateTime lastSnapshot
-) {}
+) implements BookmarkBuilder.With {}
