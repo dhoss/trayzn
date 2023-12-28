@@ -11,6 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -24,9 +27,18 @@ public class SecurityConfiguration {
     this.applicationContext = applicationContext;
   }
 
+  // TODO: the security configuration stuff is insanely annoying, clean up somehow
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
+    // TODO: add CORS test
+    http.cors(cors -> cors.configurationSource(request -> {
+              CorsConfiguration configuration = new CorsConfiguration();
+              configuration.setAllowedOrigins(List.of("*"));
+              configuration.setAllowedMethods(List.of("*"));
+              configuration.setAllowedHeaders(List.of("*"));
+              return configuration;
+            }))
+      .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(
         (authorizeHttpRequests) ->
           authorizeHttpRequests.requestMatchers("/**").authenticated())
