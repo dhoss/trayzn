@@ -24,6 +24,7 @@ public class BookmarkStorage implements Storage<Bookmark, UUID> {
   public BookmarkStorage(
       BookmarkRepository bookmarkRepository,
       Clock clock) {
+
     this.bookmarkRepository = bookmarkRepository;
     this.clock = clock;
   }
@@ -34,12 +35,9 @@ public class BookmarkStorage implements Storage<Bookmark, UUID> {
       log.info("Saving bookmark {}", bookmark);
       return bookmarkRepository.save(bookmarkWithDefaults);
     } catch (DbActionExecutionException e) {
-      log.debug("***** EXCEPTION MESSAGE {}", e.getCause().getMessage());
       if (e.getCause().getMessage().toLowerCase().contains("duplicate key value")) {
         log.info("Bookmark is a duplicate, touching updated column");
-        OffsetDateTime updated = bookmarkRepository.touch(bookmarkWithDefaults.uuid());
-        log.debug("****** UPDATED {}", updated);
-        return bookmarkWithDefaults.withUpdated(updated);
+        return bookmarkWithDefaults.withUpdated(bookmarkRepository.touch(bookmarkWithDefaults.uuid()));
       } else {
         throw new Exception(e);
       }
