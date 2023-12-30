@@ -1,6 +1,5 @@
 package in.stonecolddev.trayzn.api.v1.bookmark;
 
-import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
@@ -22,15 +21,19 @@ public class BookmarkStorage implements Storage<Bookmark, UUID> {
   private final Clock clock;
 
   public BookmarkStorage(
-      BookmarkRepository bookmarkRepository,
-      Clock clock) {
+      BookmarkRepository bookmarkRepository, Clock clock) {
 
     this.bookmarkRepository = bookmarkRepository;
     this.clock = clock;
   }
 
   public Bookmark write(Bookmark bookmark) throws Exception {
-    Bookmark bookmarkWithDefaults = bookmarkWithDefaults(bookmark);
+    Bookmark bookmarkWithDefaults = bookmark.withUuid(
+            Optional.ofNullable(bookmark.uuid())
+                .or(() -> bookmarkRepository.findByUrl(bookmark.url()).map(Bookmark::uuid))
+                .orElseGet(UUID::randomUUID))
+        .withCreated(OffsetDateTime.now(clock));
+
     try {
       log.info("Saving bookmark {}", bookmark);
       return bookmarkRepository.save(bookmarkWithDefaults);
@@ -44,16 +47,8 @@ public class BookmarkStorage implements Storage<Bookmark, UUID> {
     }
   }
 
-  private Bookmark bookmarkWithDefaults(Bookmark bookmark) {
-    return bookmark.withUuid(
-        Optional.ofNullable(bookmark.uuid())
-            .or(() -> bookmarkRepository.findByUrl(bookmark.url()).map(Bookmark::uuid))
-            .orElseGet(UUID::randomUUID))
-        .withCreated(OffsetDateTime.now(clock));
-  }
-
-  public Bookmark retrieve(UUID id) {
-    return null;
+  public Optional<Bookmark> retrieve(UUID id) {
+    return bookmarkRepository.findByUuid(id);
   }
 
   public List<Bookmark> retrieveAll() {
