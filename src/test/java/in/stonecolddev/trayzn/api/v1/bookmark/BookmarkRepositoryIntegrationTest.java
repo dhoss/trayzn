@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.net.MalformedURLException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,13 +20,13 @@ public class BookmarkRepositoryIntegrationTest {
   private BookmarkRepository bookmarkRepository;
 
   @Test
-  public void save() throws MalformedURLException {
+  public void save() {
     var bookmark = BookmarkBuilder.builder()
-                     .url("http://www.google.com/")
-                     .title("Google")
-                     .favIconUrl("http://google.com/favicon.ico")
-                     .build();
-    System.out.printf("***** BOOKMARK %s%n", bookmark);
+        .uuid(UUID.randomUUID())
+        .url("http://www.google.com/")
+        .title("Google")
+        .favIconUrl("http://google.com/favicon.ico")
+        .build();
 
     var saved = bookmarkRepository.save(bookmark);
 
