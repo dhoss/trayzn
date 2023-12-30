@@ -52,14 +52,4 @@ public class SecurityConfiguration {
 
     return http.build();
   }
-
-  @Bean
-  public AccessDeniedHandler accessDeniedHandler() {
-    return new in.stonecolddev.trayzn.api.v1.authentication.AccessDeniedHandler();
-  }
-
-  @Bean
-  public AuthenticationFailureHandler authenticationFailureHandler() {
-    return new in.stonecolddev.trayzn.api.v1.authentication.AuthenticationFailureHandler();
-  }
 }

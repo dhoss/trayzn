@@ -40,7 +40,6 @@ class BookmarkControllerTest {
       .andExpect(status().isOk());
   }
 
-  // TODO: fix authentication setup so that it returns the correct error instead of throwing an exception
   @Test
   public void addBookmarkUnauthorized() {
     assertThrows(
