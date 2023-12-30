@@ -22,7 +22,7 @@ public class BookmarkController {
   }
 
   @PostMapping("/add")
-  public HttpEntity<Bookmark> create(@RequestBody Bookmark bookmark) {
+  public HttpEntity<Bookmark> create(@RequestBody Bookmark bookmark) throws Exception {
     log.info("Adding bookmark {}", bookmark);
     return ResponseEntity.ok(bookmarkStorage.write(bookmark));
   }

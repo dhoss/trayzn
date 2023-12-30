@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Storage<T, U> {
 
-  T write(T item);
+  T write(T item) throws Exception;
 
   T retrieve(U id);
 
