@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -25,7 +26,6 @@ class BookmarkStorageTest {
   BookmarkRepository repository = mock(BookmarkRepository.class);
 
   DbActionExecutionException dbe = mock(DbActionExecutionException.class);
-
 
   @Test
   public void write() throws Exception {
@@ -40,28 +40,34 @@ class BookmarkStorageTest {
     Bookmark bmWithDefaults =
         bm.withCreated(OffsetDateTime.now(clock)).withUuid(uuid);
 
+    // new bookmark
     when(repository.findByUrl(bm.url())).thenReturn(Optional.empty());
     when(repository.save(any())).thenReturn(bmWithDefaults);
 
     assertEquals(bmWithDefaults, storage.write(bm));
+    verify(repository, times(1)).findByUrl(bm.url());
+    verify(repository, times(0)).touch(uuid);
 
     reset(repository);
 
-    when(repository.findByUrl(bm.url())).thenReturn(Optional.of(bm));
-    when(repository.save(any())).thenReturn(bmWithDefaults);
-
-    assertEquals(bmWithDefaults, storage.write(bm));
-
-    reset(repository);
-
+    // bookmark exists
     when(repository.findByUrl(bm.url())).thenReturn(Optional.of(bmWithDefaults));
     when(dbe.getCause()).thenReturn(new Throwable("ERROR: duplicate key value violates unique constraint"));
     when(repository.save(any())).thenThrow(dbe);
 
-    assertEquals(bmWithDefaults, storage.write(bm));
+    OffsetDateTime updatedTouched = OffsetDateTime.now(clock).plusMinutes(1L);
+    when(repository.touch(uuid)).thenReturn(updatedTouched);
+
+    assertEquals(bmWithDefaults.withUpdated(updatedTouched), storage.write(bm));
     verify(repository, times(1)).touch(uuid);
 
+    reset(repository);
 
+    // unaccounted for database exception
+    when(repository.findByUrl(bm.url())).thenReturn(Optional.of(bmWithDefaults));
+    when(dbe.getCause()).thenReturn(new Throwable("some other error"));
+    when(repository.save(any())).thenThrow(dbe);
+
+    assertThrows(Exception.class, () -> storage.write(bm));
   }
-
 }
