@@ -42,6 +42,7 @@ public class BookmarkStorage implements Storage<Bookmark, UUID> {
         log.info("Bookmark is a duplicate, touching updated column");
         return bookmarkWithDefaults.withUpdated(bookmarkRepository.touch(bookmarkWithDefaults.uuid()));
       } else {
+        // TODO: throw a better exception when checking for duplicate bookmarks
         throw new Exception(e);
       }
     }
